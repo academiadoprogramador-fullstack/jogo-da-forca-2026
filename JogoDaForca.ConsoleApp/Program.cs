@@ -18,7 +18,7 @@ class Program
     {
         while (true == true)
         {
-            // Console.Clear();
+            Console.Clear();
             Console.WriteLine("---------------------------------");
             Console.WriteLine("Jogo da Forca");
             Console.WriteLine("---------------------------------");
@@ -27,8 +27,6 @@ class Program
             // 1. Ao iniciar o jogo, deve ser selecionada uma palavra aleatória à partir de uma lista.
             // Escolher uma palavra aleatória
             string palavraAleatoria = "CAJA";
-
-            Console.WriteLine(palavraAleatoria);
 
             // 2. O jogador poderá chutar a palavra secreta letra por letra, cada letra certa deverá ser apresentada,
             // assim como as letras erradas.
@@ -40,10 +38,16 @@ class Program
             }
 
             bool jogadorAcertouPalavra = false;
+            bool jogadorPerdeu = false;
 
-            while (jogadorAcertouPalavra == false)
+            int quantidadeErros = 0;
+
+            while (!jogadorAcertouPalavra && !jogadorPerdeu)
             {
-                Console.WriteLine(letrasAcertadas);
+                Console.Clear();
+
+                Console.WriteLine("Letras acertadas: " + string.Join("", letrasAcertadas));
+                Console.WriteLine("Erros cometidos: " + quantidadeErros);
 
                 Console.Write("Digite uma letra: ");
                 string? strLetra = Console.ReadLine();
@@ -57,6 +61,8 @@ class Program
 
                 char letraChute = char.ToUpper(Convert.ToChar(strLetra));
 
+                bool letraFoiEncontrada = false;
+
                 for (int contador = 0; contador < palavraAleatoria.Length; contador++)
                 {
                     char letraAtual = palavraAleatoria[contador];
@@ -64,10 +70,30 @@ class Program
                     if (letraChute == letraAtual)
                     {
                         letrasAcertadas[contador] = letraAtual;
+                        letraFoiEncontrada = true;
                     }
                 }
 
+                if (letraFoiEncontrada == false)
+                    quantidadeErros++;
+
                 jogadorAcertouPalavra = palavraAleatoria == string.Join("", letrasAcertadas);
+                jogadorPerdeu = quantidadeErros > 5;
+
+                if (jogadorAcertouPalavra)
+                {
+                    Console.WriteLine("---------------------------------");
+                    Console.WriteLine($"Você acertou! A palavra secreta era {palavraAleatoria}.");
+                    Console.WriteLine("---------------------------------");
+                }
+                else if (jogadorPerdeu)
+                {
+                    Console.WriteLine("---------------------------------");
+                    Console.WriteLine("Que azar! Tente novamente.");
+                    Console.WriteLine("---------------------------------");
+                }
+
+                Console.ReadLine();
             }
 
             Console.Write("Deseja continuar o jogo? (s/N): ");
